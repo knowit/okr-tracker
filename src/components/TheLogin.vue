@@ -13,7 +13,7 @@ export default {
   methods: {
     login() {
       this.$login().then(() => {
-        location.reload();
+        console.log('logging in');
       });
     },
   },
