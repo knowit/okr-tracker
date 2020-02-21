@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <the-header></the-header>
     <the-login></the-login>
   </div>
 </template>

@@ -6,10 +6,8 @@
           Denne siden er nå lagt ned og blir verken brukt eller videreutviklet på. Ny side ligger ute på
           <a href="https://okr.oslo.systems">okr.oslo.systems</a>
         </span>
+        <video src="https://thumbs.gfycat.com/HollowWaterloggedAnhinga-mobile.mp4" autoplay loop />
       </div>
-      <h1 class="title-1">Du er ikke logget inn</h1>
-      <p>Logg inn med organisasjonskonto for å bruke denne applikasjonen.</p>
-      <button disabled class="btn" @click="login()">Logg inn med Google</button>
     </div>
   </div>
 </template>
@@ -47,5 +45,6 @@ export default {
   align-items: center;
   padding: 2rem;
   margin-bottom: 2rem;
+  flex-direction: column;
 }
 </style>
