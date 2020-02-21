@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <the-header></the-header>
-    <the-login v-if="!isLoggedIn"></the-login>
-    <router-view v-else></router-view>
+    <the-login></the-login>
   </div>
 </template>
 
