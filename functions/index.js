@@ -47,3 +47,8 @@ exports.automatedRestore = automatedRestore();
  */
 exports.scheduledFunction = scheduledFunction();
 exports.triggerScheduledFunction = triggerScheduledFunction();
+
+/**
+ * Migrates user IDs
+ */
+exports.migrateUserIds = require('./migrateUserIds').migrateUserIds;
