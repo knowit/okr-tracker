@@ -5,8 +5,8 @@ const config = require('../config');
 
 const db = admin.firestore();
 
-const from = '@byr.oslo.kommune.no';
-const to = '@origo.oslo.kommune.no';
+const from = '@origo.oslo.kommune.no';
+const to = '@byr.oslo.kommune.no';
 
 exports.migrateUserIds = functions.region(config.region).https.onRequest(async (req, res) => {
   try {
@@ -23,7 +23,7 @@ exports.migrateUserIds = functions.region(config.region).https.onRequest(async (
 async function replaceUserDocuments() {
   const users = db.collection('users');
   const userRefs = await users.get().then(({ docs }) => docs);
-  const userData = userRefs.map(doc => ({
+  const userData = userRefs.map((doc) => ({
     ...doc.data(),
     id: doc.id.replace(from, to),
     email: doc.id.replace(from, to),
@@ -31,7 +31,7 @@ async function replaceUserDocuments() {
 
   await Promise.all(userRefs.map(({ ref }) => ref.delete()));
 
-  userData.forEach(obj => {
+  userData.forEach((obj) => {
     users.doc(obj.id).set(obj);
   });
 }
@@ -44,7 +44,7 @@ async function replaceTeams() {
   if (!productRefs.length) return;
 
   return Promise.all(
-    productRefs.map(doc => {
+    productRefs.map((doc) => {
       const { team: existingTeam } = doc.data();
       const team = existingTeam.map(({ id }) => users.doc(id.replace(from, to))) || [];
 
@@ -58,7 +58,7 @@ async function processCollectionGroups() {
 
   try {
     Promise.all(
-      collectionGroups.map(group => {
+      collectionGroups.map((group) => {
         return db
           .collectionGroup(group)
           .get()
@@ -74,7 +74,7 @@ async function processCollectionGroups() {
 async function replaceCreatedAndEdited(list) {
   const users = db.collection('users');
 
-  list.forEach(doc => {
+  list.forEach((doc) => {
     const { editedBy, createdBy } = doc.data();
 
     if (createdBy && createdBy.id) {
@@ -97,7 +97,7 @@ async function processAudit() {
   if (!documents.length) return;
 
   return Promise.all(
-    documents.map(doc => {
+    documents.map((doc) => {
       const { user } = doc.data();
 
       if (!user) return;
