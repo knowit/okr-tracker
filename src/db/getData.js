@@ -1,5 +1,4 @@
 import { db } from '@/config/firebaseConfig';
-import { organization } from '../config/breadcrumbs';
 
 const orgs = [];
 const departments = [];
@@ -19,6 +18,7 @@ const getData = async () => {
           ref: doc.ref.id,
           name,
           missionStatement,
+          periods: [],
         });
       })
     );
@@ -36,6 +36,7 @@ const getData = async () => {
           name,
           missionStatement,
           organization: organization.id,
+          periods: [],
         });
       });
     });
@@ -53,6 +54,7 @@ const getData = async () => {
           name,
           missionStatement,
           department: department.id,
+          periods: [],
         });
       });
     });
@@ -88,14 +90,14 @@ const getData = async () => {
           startDate,
           endDate,
           parent: parent.id,
+          objectives: [],
         });
       });
     });
 
   objectives.forEach(obj => {
     periods.forEach(period => {
-      period.objectives = [];
-      if (period.id === obj.period.id) {
+      if (period.ref === obj.period) {
         period.objectives.push(obj);
       }
     });
@@ -103,22 +105,19 @@ const getData = async () => {
 
   periods.forEach(period => {
     departments.forEach(dep => {
-      dep.periods = [];
-      if (dep.id === period.parent.id) {
+      if (dep.ref === period.parent) {
         dep.periods.push(period);
       }
     });
 
     products.forEach(prod => {
-      prod.periods = [];
-      if (prod.id === period.parent.id) {
+      if (prod.ref === period.parent) {
         prod.periods.push(period);
       }
     });
 
     orgs.forEach(org => {
-      org.periods = [];
-      if (org.id === period.parent.id) {
+      if (org.ref === period.parent) {
         org.periods.push(period);
       }
     });
