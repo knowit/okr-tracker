@@ -40,7 +40,9 @@ const deleteDeep = async id => {
   db.collection('products')
     .where('department', '==', collection.doc(id))
     .get()
+
     .then(({ docs }) => docs.forEach(({ ref }) => Product.deleteDeep(ref.id)));
+
 
   return deleteDocument(update, collection.doc(id));
 };

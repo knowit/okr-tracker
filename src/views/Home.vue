@@ -1,5 +1,6 @@
 <template>
   <div>
+    <button @click="getData">GetData</button>
     <ul v-if="user" class="items">
       <li v-for="org in tree" :key="org.id">
         <ItemRow :data="org" type="organization"></ItemRow>
@@ -20,6 +21,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import getData from '@/db/getData';
 
 export default {
   name: 'Home',
@@ -31,6 +33,10 @@ export default {
   computed: {
     ...mapGetters(['tree']),
     ...mapState(['user']),
+  },
+
+  methods: {
+    getData,
   },
 };
 </script>
