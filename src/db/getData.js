@@ -81,7 +81,9 @@ const getData = async () => {
     .where('archived', '==', false)
     .get()
     .then(({ docs }) => {
-      docs.forEach(doc => {
+      const filteredDocs = docs.filter(filterPeriodsIncludeToday);
+
+      filteredDocs.forEach(doc => {
         const { name, startDate, endDate, parent } = doc.data();
 
         periods.push({
@@ -128,6 +130,14 @@ const getData = async () => {
   console.log(products);
   console.log(periods);
   console.log(objectives);
+};
+
+const filterPeriodsIncludeToday = doc => {
+  const now = new Date();
+  const { startDate, endDate } = doc.data();
+  if (startDate.toDate() > now) return false;
+  if (endDate.toDate() < now) return false;
+  return true;
 };
 
 export default getData;
