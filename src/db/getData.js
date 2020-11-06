@@ -134,7 +134,7 @@ const getData = async () => {
     dep.periods = newPeriod || p[0];
 
     orgs.forEach(org => {
-      if (org.ref === dep.parent) {
+      if (org.ref === dep.organization) {
         org.departments.push(dep);
       }
     });
@@ -158,7 +158,7 @@ const getData = async () => {
     prod.periods = newPeriod || p[0];
 
     departments.forEach(dep => {
-      if (dep.ref === prod.parent) {
+      if (dep.ref === prod.department) {
         dep.products.push(prod);
       }
     });
