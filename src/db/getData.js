@@ -19,6 +19,7 @@ const getData = async () => {
           name,
           missionStatement,
           periods: [],
+          departments: [],
         });
       })
     );
@@ -37,6 +38,7 @@ const getData = async () => {
           missionStatement,
           organization: organization.id,
           periods: [],
+          products: [],
         });
       });
     });
@@ -81,16 +83,14 @@ const getData = async () => {
     .where('archived', '==', false)
     .get()
     .then(({ docs }) => {
-      const filteredDocs = docs.filter(filterPeriodsIncludeToday);
-
-      filteredDocs.forEach(doc => {
+      docs.forEach(doc => {
         const { name, startDate, endDate, parent } = doc.data();
 
         periods.push({
           ref: doc.ref.id,
           name,
-          startDate,
-          endDate,
+          startDate: startDate.toDate(),
+          endDate: endDate.toDate(),
           parent: parent.id,
           objectives: [],
         });
@@ -125,18 +125,55 @@ const getData = async () => {
     });
   });
 
+  departments.forEach(dep => {
+    const p = dep.periods.sort((a, b) => {
+      return b.startDate - a.startDate;
+    });
+    const test = p.filter(filterPeriodsIncludeToday);
+    const newPeriod = test[0] && test[0].ref ? test[0] : null;
+    dep.periods = newPeriod || p[0];
+
+    orgs.forEach(org => {
+      if (org.ref === dep.parent) {
+        org.departments.push(dep);
+      }
+    });
+  });
+
+  orgs.forEach(org => {
+    const p = org.periods.sort((a, b) => {
+      return b.startDate - a.startDate;
+    });
+    const test = p.filter(filterPeriodsIncludeToday);
+    const newPeriod = test[0] && test[0].ref ? test[0] : null;
+    org.periods = newPeriod || p[0];
+  });
+
+  products.forEach(prod => {
+    const p = prod.periods.sort((a, b) => {
+      return b.startDate - a.startDate;
+    });
+    const test = p.filter(filterPeriodsIncludeToday);
+    const newPeriod = test[0] && test[0].ref ? test[0] : null;
+    prod.periods = newPeriod || p[0];
+
+    departments.forEach(dep => {
+      if (dep.ref === prod.parent) {
+        dep.products.push(prod);
+      }
+    });
+  });
+
   console.log(orgs);
   console.log(departments);
   console.log(products);
-  console.log(periods);
-  console.log(objectives);
 };
 
 const filterPeriodsIncludeToday = doc => {
   const now = new Date();
-  const { startDate, endDate } = doc.data();
-  if (startDate.toDate() > now) return false;
-  if (endDate.toDate() < now) return false;
+  const { startDate, endDate } = doc;
+  if (startDate > now) return false;
+  if (endDate < now) return false;
   return true;
 };
 
