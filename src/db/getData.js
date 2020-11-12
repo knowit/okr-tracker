@@ -164,9 +164,7 @@ const getData = async () => {
     });
   });
 
-  console.log(orgs);
-  console.log(departments);
-  console.log(products);
+  console.log(JSON.stringify(orgs));
 };
 
 const filterPeriodsIncludeToday = doc => {
