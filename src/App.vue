@@ -4,6 +4,7 @@
     <Breadcrumbs></Breadcrumbs>
     <main class="container">
       <div class="sidebarContainer">
+        <button @click="migrateUsers">Migrate users</button>
         <SidebarNavigation v-if="user"></SidebarNavigation>
       </div>
       <div class="main-view">
@@ -16,6 +17,7 @@
 </template>
 
 <script>
+import { functions } from '@/config/firebaseConfig';
 import { mapState } from 'vuex';
 import i18n from '@/locale/i18n';
 
@@ -45,6 +47,17 @@ export default {
 
   created() {
     document.querySelector('#spinner').remove();
+  },
+
+  methods: {
+    async migrateUsers() {
+      try {
+        const myCall = functions.httpsCallable('migrateUserIds');
+        await myCall();
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 };
 
