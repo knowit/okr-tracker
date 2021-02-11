@@ -52,7 +52,7 @@
             input-type="input"
             name="startValue"
             :label="$t('keyres.startValue')"
-            rules="required|numeric"
+            rules="required"
             type="number"
           />
 
@@ -61,7 +61,7 @@
             input-type="input"
             name="targetValue"
             :label="$t('keyres.targetValue')"
-            rules="required|numeric"
+            rules="required"
             type="number"
           />
 
@@ -195,7 +195,7 @@ export default {
           .collection('slugs')
           .doc(this.data.parent.slug)
           .get()
-          .then(snapshot => snapshot.data().reference);
+          .then((snapshot) => snapshot.data().reference);
         this.$bind('objectives', db.collection('objectives').where('parent', '==', parent));
         this.$bind('keyResult', db.collection('keyResults').doc(this.data.id));
       },
@@ -230,7 +230,7 @@ export default {
           auto: auto || false,
           unit: unit || '',
           startValue: startValue || 0,
-          targetValue: targetValue || 100,
+          targetValue: targetValue === undefined ? 100 : targetValue,
           sheetCell: sheetCell || '',
           sheetId: sheetId || '',
           sheetName: sheetName || '',

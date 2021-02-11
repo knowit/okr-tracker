@@ -4,15 +4,137 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+## [2.0.0-rc.3] 2021-01-26
+
 ### Added
 
+- Drop IE 11 support
+- Meta-tags for fb/twitter/open graph
+- robots.txt
+
+### Fixed
+
+- Line chart should handle higher values even if it is higher than target value
+
+### Changes
+
+- Cron job changes to scheduled cloud functions
+- Set time zone to Europe/Oslo for scheduled cloud functions
+- Updated dependencies
+
+## [2.0.0-rc.2] - 2021-01-20
+
+### Added
+
+- Show all comments in progression list for a key result
+
+### Fixed
+
+- Loading loop when trying to access site without credentials
+- Automated key results not actually running automatically (cron job set to once a day)
+- Line graph handling numbers >100k
+- Progression not updating when archiving key results
+
+### Changes
+
+- Give cloud functions more memory and a longer timeout
+- Better filter support in details page of a kpi
+
+## [2.0.0-rc.1] - 2021-01-19
+
+### Added
+
+- Collapse rows of organizations and departments on the front page - save to user objects (everyone starts with collapsed)
+- Search through items in the admin panel - if there are over 15 items respectively
+
+### Fixed
+
+- KeyResult: allow target value to be 0
+- Allow decimals on inputs
+- Show team members even though a period is not present
+
+### Changes
+
+- Items in the admin panel are sorted by name
+- Departments and products are sorted by name in ASC order
+- Small change to KPI for users - no number formatting when in ItemHome-view only in Home-view
+- Updated dependencies
+
+## [2.0.0-beta.9] - 2021-01-15
+
+### Fixed
+
+- Typo in cloud function code for KPIs
+- Call cloud function in correct region - change from central1 to europe-west2
+
+### Changes
+
+- Updated dependencies
+
+## [2.0.0-beta.8] - 2020-12-18
+
+### Added
+
+- Access to Team Drives for service accounts (if strict domain policy is enabled)
+
+### Changes
+
+- Better explanation about the Google Sheets information when adding KPIs
+- Objectives/KeyResults are ordered alphabetically
+- Updated dependencies
+- Updated firestore indexes
+
+## [2.0.0-beta.7] - 2020-12-14
+
+### Changes
+
+- Admin OKRs component - No need to fetch data every single time
+- Updated dependencies
+
+## [2.0.0-beta.6] - 2020-12-14
+
+### Fixed
+
+- Components in admin-okr not updating correctly
+
+## [2.0.0-beta.5] - 2020-12-11
+
+### Added
+
+- Information about enabling Google Sheets API
+- Allow use of decimal-numbers
+
+### Removed
+
+- vue-resize is not used
+- Unused css-styles
+
+### Changes
+
+- Updated Firebase to 8.1.2
+- More consistent BEM-naming
+- Updated dependencies
+
+## [2.0.0-beta.4] - 2020-11-29
+
+### Changes
+
+- Updated firebase storage rules to v2
+
+## [2.0.0-beta.3] - 2020-11-29
+
+### Added
+
+- Filter KPI-progression
 - E2E-tests (alpha)
 
 ### Changes
 
+- Updated the design of `KpiHome.vue`
 - Moved duplicate css-code to global
 - Renamed html-tags to kebab-case
 - Minor improvements to the code
+- Updated prettier-config `arrowParens` from `avoid` to `always`
 
 ## [2.0.0-beta.2] - 2020-11-05
 

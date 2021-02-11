@@ -100,8 +100,8 @@ export default {
           items: this.periods,
           type: 'period',
           icon: 'fa-calendar-alt',
-          activeClass: id => this.editObject && id === this.editObject.id,
-          selectedClass: id => id === this.selectedPeriodId,
+          activeClass: (id) => this.editObject && id === this.editObject.id,
+          selectedClass: (id) => id === this.selectedPeriodId,
           notSelected: false,
           addEvent: this.createPeriod,
           nonexistent: this.$t('empty.itemAdmin.period'),
@@ -112,8 +112,8 @@ export default {
           items: this.objectives,
           type: 'objective',
           icon: 'fa-trophy',
-          activeClass: id => this.editObject && id === this.editObject.id,
-          selectedClass: id => id === this.selectedObjectiveId,
+          activeClass: (id) => this.editObject && id === this.editObject.id,
+          selectedClass: (id) => id === this.selectedObjectiveId,
           notSelected: !this.selectedType ? this.$t('admin.noPeriodSelected') : false,
           addEvent: this.createObjective,
           nonexistent: this.$t('empty.itemAdmin.objective'),
@@ -124,7 +124,7 @@ export default {
           items: this.keyResults,
           type: 'keyResult',
           icon: 'fa-chart-pie',
-          activeClass: id => this.editObject && id === this.editObject.id,
+          activeClass: (id) => this.editObject && id === this.editObject.id,
           selectedClass: () => false,
           notSelected:
             !this.selectedType || this.selectedType === 'period' ? this.$t('admin.noObjectiveSelected') : false,
@@ -139,13 +139,19 @@ export default {
   watch: {
     '$route.query': {
       immediate: true,
-      async handler(query) {
-        await this.setItems(query);
-        this.setFormComponent(query);
+      async handler(newQuery, oldQuery) {
+        if (newQuery && !oldQuery) {
+          await this.setItems(newQuery, true);
+        } else {
+          await this.setItems(newQuery, false);
+        }
+        this.setFormComponent(newQuery);
       },
     },
+
     async showArchived() {
       const { query } = this.$route;
+
       await this.bindPeriods();
       await this.setItems(query);
       this.setFormComponent(query);
@@ -163,15 +169,18 @@ export default {
       switch (type) {
         case 'period':
           this.editForm = () => import('./ItemAdminPeriod.vue');
-          this.editObject = this.periods.find(obj => obj.id === id);
+          this.editObject = this.periods.find((obj) => obj.id === id);
+          this.selectedObjectiveId = null;
+          this.selectedPeriodId = id;
           break;
         case 'objective':
           this.editForm = () => import('./ItemAdminObjective.vue');
-          this.editObject = this.objectives.find(obj => obj.id === id);
+          this.editObject = this.objectives.find((obj) => obj.id === id);
+          this.selectedObjectiveId = id;
           break;
         case 'keyResult':
           this.editForm = () => import('./ItemAdminKeyResult.vue');
-          this.editObject = this.keyResults.find(obj => obj.id === id);
+          this.editObject = this.keyResults.find((obj) => obj.id === id);
           break;
         default:
           this.editForm = null;
@@ -179,7 +188,7 @@ export default {
       }
     },
 
-    async setItems({ type, id }) {
+    async setItems({ type, id }, update) {
       if (!type || !id) {
         if (this.objectives.length) this.$unbind('objectives');
         if (this.keyResults.length) this.$unbind('keyResults');
@@ -193,35 +202,35 @@ export default {
       if (type === 'period') {
         await this.bindObjectives({ parentId: id });
         if (this.keyResults.length) this.$unbind('keyResults');
-        this.selectedObjectiveId = null;
-        this.selectedPeriodId = id;
       } else if (type === 'objective') {
         await this.bindKeyResults({ parentId: id });
 
-        const objective = await db
-          .collection('objectives')
-          .doc(id)
-          .get()
-          .then(snap => snap.data());
+        if (update) {
+          const objective = await db
+            .collection('objectives')
+            .doc(id)
+            .get()
+            .then((snap) => snap.data());
 
-        if (objective && objective.period) {
-          await this.bindObjectives({ parentId: objective.period.id });
-          this.selectedPeriodId = objective.period.id;
+          if (objective && objective.period) {
+            await this.bindObjectives({ parentId: objective.period.id });
+            this.selectedPeriodId = objective.period.id;
+          }
         }
 
         this.selectedObjectiveId = id;
-      } else if (type === 'keyResult') {
+      } else if (type === 'keyResult' && update) {
         const keyRes = await db
           .collection('keyResults')
           .doc(id)
           .get()
-          .then(snap => snap.data());
+          .then((snap) => snap.data());
 
         const objective = await db
           .collection('objectives')
           .doc(keyRes.objective.id)
           .get()
-          .then(snap => snap.data());
+          .then((snap) => snap.data());
 
         this.selectedPeriodId = objective.period.id;
         this.selectedObjectiveId = keyRes.objective.id;

@@ -5,12 +5,12 @@
       <p>{{ activeKeyResult.description }}</p>
 
       <div class="main-widgets">
-        <div class="main-widgets__current main-widgets__current__children">
+        <div class="main-widgets__current main-widgets__current--children">
           <h3 class="main-widgets__title">
             <i class="fas fa-chart-line" />
             {{ $t('keyres.registerProgression.value') }}
           </h3>
-          <div class="main-widgets__current__value">
+          <div class="main-widgets__current--value">
             {{
               typeof activeKeyResult.currentValue === 'undefined'
                 ? activeKeyResult.startValue
@@ -18,7 +18,7 @@
             }}
           </div>
 
-          <div class="main-widgets__current__unit">
+          <div class="main-widgets__current--unit">
             {{ activeKeyResult.unit }}
           </div>
 
@@ -66,7 +66,15 @@
               <th>{{ $t('keyResultPage.value') }}</th>
               <th>{{ $t('keyResultPage.date') }}</th>
               <th>{{ $t('keyResultPage.registeredBy') }}</th>
-              <th></th>
+              <th>
+                <button v-if="hasComments" class="btn btn--ter" @click="showComments = !showComments">
+                  <span
+                    v-tooltip="!showComments ? $t('keyres.showComments') : $t('keyres.hideComments')"
+                    class="fa"
+                    :class="showComments ? 'fa-eye' : 'fa-eye-slash'"
+                  ></span>
+                </button>
+              </th>
               <th></th>
             </tr>
           </thead>
@@ -89,8 +97,11 @@
                   <span class="user__name">{{ p.createdBy.displayName || p.createdBy.id }}</span>
                 </router-link>
               </td>
-              <td>
-                <v-popover v-if="p.comment" placement="top" :open="isFirstProgressWithComment(p)">
+              <td style="max-width: 200px; padding: 0.25rem">
+                <span v-if="p.comment && showComments">
+                  {{ p.comment }}
+                </span>
+                <v-popover v-if="p.comment && !showComments" placement="top">
                   <i v-tooltip="$t('keyres.showComment')" class="fa fa-comment-alt comment-icon" />
                   <template slot="popover">
                     {{ p.comment }}
@@ -159,10 +170,16 @@ export default {
     newValue: null,
     graph: null,
     isOpen: false,
+    showComments: false,
   }),
 
   computed: {
     ...mapState(['activeKeyResult', 'activePeriod', 'user', 'activeItem']),
+
+    hasComments() {
+      const firstProgressWithComment = this.progress.find(({ comment }) => comment);
+      return firstProgressWithComment !== undefined;
+    },
   },
 
   watch: {
@@ -194,11 +211,6 @@ export default {
   methods: {
     dateTimeShort,
 
-    isFirstProgressWithComment({ id }) {
-      const firstProgressWithComment = this.progress.find(({ comment }) => comment);
-      return id === firstProgressWithComment.id;
-    },
-
     async remove(id) {
       try {
         await Progress.remove(this.activeKeyResult.id, id);
@@ -228,107 +240,9 @@ export default {
   flex-wrap: wrap;
 }
 
-.main-widgets {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  margin-top: 1.5rem;
-  margin-bottom: 2rem;
-
-  @media screen and (max-width: bp(s)) {
-    flex-direction: column;
-  }
-
-  &__title {
-    margin-bottom: 0.5rem;
-    color: $color-grey-400;
-    font-weight: 500;
-    font-size: $font-size-0;
-    text-transform: uppercase;
-  }
-
-  &__current {
-    align-self: flex-start;
-    width: span(3);
-    margin-bottom: 0.5rem;
-
-    padding: 1rem;
-    background: white;
-    box-shadow: 0 2px 3px rgba(black, 0.1);
-
-    @media screen and (max-width: bp(s)) {
-      width: span(9);
-    }
-
-    @media screen and (min-width: bp(m)) {
-      width: span(2, 0, span(9));
-    }
-
-    @media screen and (min-width: bp(l)) {
-      width: span(2, 0, span(7));
-    }
-
-    @media screen and (min-width: bp(xl)) {
-      width: span(2, 0, span(6));
-    }
-
-    &__value {
-      color: $color-yellow;
-      font-weight: 700;
-      font-size: 50px;
-    }
-
-    &__unit {
-      margin-top: -0.5rem;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      text-transform: capitalize;
-    }
-
-    &__children {
-      display: flex;
-      flex-direction: column;
-    }
-  }
-
-  &__graph {
-    width: span(9);
-
-    margin-left: span(0, 1);
-    padding: 1rem;
-    background: white;
-    box-shadow: 0 2px 3px rgba(black, 0.1);
-
-    @media screen and (max-width: bp(s)) {
-      margin-left: span(0);
-    }
-
-    @media screen and (min-width: bp(m)) {
-      width: span(7, 0, span(9));
-      margin-left: span(0, 1, span(9));
-    }
-
-    @media screen and (min-width: bp(l)) {
-      width: span(5, 0, span(7));
-      margin-left: span(0, 1, span(7));
-    }
-
-    @media screen and (min-width: bp(xl)) {
-      width: span(4, 0, span(6));
-      margin-left: span(0, 1, span(6));
-    }
-  }
-}
-
 .main__table {
   width: 100%;
   overflow: auto;
-}
-
-.group {
-  margin-bottom: 1rem;
-  background: white;
-  box-shadow: 0 2px 2px rgba(black, 0.06);
 }
 
 .comment-icon {
@@ -365,11 +279,11 @@ export default {
   background: rgba($color-yellow, 0.25);
   border: 1px solid $color-yellow;
   border-radius: 3px;
+}
 
-  &--invalid {
-    background: rgba($color-red, 0.25);
-    border: 1px solid $color-red;
-  }
+.auto--invalid {
+  background: rgba($color-red, 0.25);
+  border: 1px solid $color-red;
 }
 
 .auto__text {

@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueSelect from 'vue-select';
-import VueResize from 'vue-resize';
 import Toasted from 'vue-toasted';
 import VTooltip from 'v-tooltip';
 import VueMeta from 'vue-meta';
@@ -20,7 +19,6 @@ import './styles/main.scss';
 
 // import plugin styles
 import 'vue-select/dist/vue-select.css';
-import 'vue-resize/dist/vue-resize.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import 'flatpickr/dist/flatpickr.css';
 
@@ -29,7 +27,6 @@ const { auth } = require('./config/firebaseConfig');
 Vue.config.productionTip = false;
 
 // Use plugins
-Vue.use(VueResize);
 Vue.use(Toasted, {
   position: 'bottom-right',
   className: 'toast',
@@ -62,14 +59,14 @@ extend('email', email);
 extend('numeric', numeric);
 extend('min', min);
 extend('max', max);
-extend('decimal', num => typeof num === 'number');
-extend('positiveNotZero', num => typeof num === 'number' && num > 0);
+extend('decimal', (num) => typeof num === 'number');
+extend('positiveNotZero', (num) => typeof num === 'number' && num > 0);
 
 Vue.config.productionTip = false;
 
 let app;
 
-auth.onAuthStateChanged(async user => {
+auth.onAuthStateChanged(async (user) => {
   try {
     await store.dispatch('set_user', user);
     await store.dispatch('init_state');
@@ -86,7 +83,11 @@ auth.onAuthStateChanged(async user => {
     await store.dispatch('reset_state');
 
     if (!router.currentRoute.name && router.history.getCurrentLocation() !== '/') {
-      await router.push(router.history.getCurrentLocation());
+      await router.push(router.history.getCurrentLocation()).catch(() => {
+        if (document.querySelector('#spinner')) {
+          document.querySelector('#spinner').remove();
+        }
+      });
     } else {
       await router.push({
         name: 'Login',
@@ -101,7 +102,7 @@ auth.onAuthStateChanged(async user => {
       router,
       store,
       i18n,
-      render: h => h(App),
+      render: (h) => h(App),
     });
 
     router.beforeEach((to, from, next) => {

@@ -1,4 +1,4 @@
-import { select, scaleTime, scaleLinear, axisLeft, axisBottom, extent, line, area } from 'd3';
+import { select, scaleTime, scaleLinear, axisLeft, axisBottom, extent, line, area, max } from 'd3';
 import { initSvg, resize } from './linechart-helpers';
 
 export default class LineChart {
@@ -16,19 +16,21 @@ export default class LineChart {
     this.y = scaleLinear().nice();
 
     this.area = area()
-      .x0(d => this.x(d.timestamp))
-      .x1(d => this.x(d.timestamp))
-      .y1(d => this.y(d.value))
-      .y0(d => this.y(d.startValue));
+      .x0((d) => this.x(d.timestamp))
+      .x1((d) => this.x(d.timestamp))
+      .y1((d) => this.y(d.value))
+      .y0((d) => this.y(d.startValue));
 
     this.line = line()
-      .x(d => this.x(d.timestamp))
-      .y(d => this.y(d.value));
+      .x((d) => this.x(d.timestamp))
+      .y((d) => this.y(d.value));
   }
 
   render(obj, period, progressionList) {
     this.period = period;
     this.obj = obj;
+
+    const highestValue = max(progressionList, (d) => d.value);
 
     this.width = this.svg.node().getBoundingClientRect().width;
     resize.call(this);
@@ -38,7 +40,12 @@ export default class LineChart {
     const endDate = period.endDate && period.endDate.toDate ? period.endDate.toDate() : new Date(period.endDate);
 
     this.x.domain([startDate, endDate]);
-    this.y.domain(extent([obj.startValue, obj.targetValue]));
+    this.y.domain(
+      extent([
+        obj.startValue,
+        obj.startValue < obj.targetValue && highestValue > obj.targetValue ? highestValue : obj.targetValue,
+      ])
+    );
 
     this.yAxis.transition().call(axisLeft(this.y));
     this.xAxis.transition().call(axisBottom(this.x).ticks(4));
@@ -52,7 +59,7 @@ export default class LineChart {
     };
 
     const datapoints = progressionList
-      .map(d => {
+      .map((d) => {
         return {
           timestamp: d.timestamp.toDate(),
           value: +d.value,

@@ -3,7 +3,7 @@
     <div class="modal">
       <div class="modal__header">
         <h2 class="title-2">{{ $t('kpi.add') }}</h2>
-        <button class="btn btn--ter close" @click="close">
+        <button class="btn btn--ter btn--close" @click="close">
           <i class="fa fa-times" />
         </button>
       </div>
@@ -43,32 +43,43 @@
               </div>
             </div>
 
-            <div class="form-row">
-              <form-component
-                v-model="kpi.sheetId"
-                input-type="input"
-                name="sheetId"
-                :label="$t('fields.sheetId')"
-                rules="required"
-                type="text"
-              />
-              <form-component
-                v-model="kpi.sheetName"
-                input-type="input"
-                name="sheetTab"
-                :label="$t('fields.sheetTab')"
-                rules="required"
-                type="text"
-              />
-              <form-component
-                v-model="kpi.sheetCell"
-                input-type="input"
-                name="sheetCell"
-                :label="$t('fields.sheetCell')"
-                rules="required"
-                type="text"
-              />
-            </div>
+            <form-component
+              v-model="kpi.sheetId"
+              input-type="input"
+              name="sheetId"
+              :label="$t('fields.sheetId')"
+              rules="required"
+              type="text"
+            >
+              <template #help>
+                <span class="form-help" v-html="$t('keyres.automation.googleSheetIdHelp')"></span>
+              </template>
+            </form-component>
+
+            <form-component
+              v-model="kpi.sheetName"
+              input-type="input"
+              name="sheetTab"
+              :label="$t('fields.sheetTab')"
+              rules="required"
+              type="text"
+            >
+              <template #help>
+                <span class="form-help" v-html="$t('keyres.automation.sheetsTabHelp')"></span>
+              </template>
+            </form-component>
+            <form-component
+              v-model="kpi.sheetCell"
+              input-type="input"
+              name="sheetCell"
+              :label="$t('fields.sheetCell')"
+              rules="required"
+              type="text"
+            >
+              <template #help>
+                <span class="form-help" v-html="$t('keyres.automation.sheetsCellHelp')"></span>
+              </template>
+            </form-component>
           </form>
         </validation-observer>
       </div>
@@ -116,7 +127,7 @@ export default {
     },
 
     availableTypes() {
-      return this.types.filter(type => !this.kpis.map(kpi => kpi.type).includes(type.id));
+      return this.types.filter((type) => !this.kpis.map((kpi) => kpi.type).includes(type.id));
     },
   },
 
@@ -175,19 +186,8 @@ export default {
   margin-left: 1rem;
 }
 
-.close {
+.btn--close {
   height: 3rem;
-}
-
-.form-row {
-  display: grid;
-  grid-gap: 0.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
-  margin: 0.5rem 0 1rem;
-
-  & > .form-group {
-    margin: 0;
-  }
 }
 
 .sheets-info {

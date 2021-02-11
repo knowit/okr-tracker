@@ -46,7 +46,9 @@ export default {
   },
 
   created() {
-    document.querySelector('#spinner').remove();
+    if (document.querySelector('#spinner')) {
+      document.querySelector('#spinner').remove();
+    }
   },
 
   methods: {

@@ -120,7 +120,8 @@
     "expand": "Expand",
     "deletePermanently": "Delete permanently",
     "restore": "Restore",
-    "confirmDeleteProgress": "Confirm delete"
+    "confirmDeleteProgress": "Confirm delete",
+    "reset": "Reset"
   },
   "login": {
     "login": "Sign in",
@@ -198,7 +199,7 @@
       "header": "Automatic progress registration",
       "readMore": "Learn more",
       "googleSheetId": "Google Sheet ID",
-      "googleSheetIdHelp": "ID from URL .../spreadsheets/d/<strong><d></strong>",
+      "googleSheetIdHelp": "ID between /d/ and /edit/ from the Google Sheets URL",
       "sheetsTab": "Tab",
       "sheetsTabHelp": "Same as the tab name in Google Sheets",
       "sheetsCell": "Cell",
@@ -219,6 +220,8 @@
     "automatic": "Automatic",
     "autoHelpText": "The value for this key result gets updated automatically from Google Sheets.",
     "showComment": "View comment",
+    "showComments": "Show comments",
+    "hideComments": "Hide comments",
     "autoError": "Issue fetching data from Google Sheets:"
   },
   "objective": {
@@ -255,16 +258,19 @@
     "department": {
       "picture": "Image",
       "create": "Create new department",
-      "parentOrganisation": "Related organization"
+      "parentOrganisation": "Related organization",
+      "search": "Search {count} organizations"
     },
     "organization": {
       "picture": "Image",
-      "create": "Create new organization"
+      "create": "Create new organization",
+      "search": "Search {count} departments"
     },
     "product": {
       "picture": "Image",
       "create": "Create new product",
-      "parentDepartment": "Related department"
+      "parentDepartment": "Related department",
+      "search": "Search {count} products"
     },
     "objects": {
       "showArchived": "View archived objects"
@@ -300,7 +306,8 @@
     "history": "History",
     "registeredBy": "Registered by",
     "value": "Value",
-    "date": "Date"
+    "date": "Date",
+    "filter": "Filter"
   },
   "help": {
     "title": "Help",

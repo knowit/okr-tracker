@@ -118,7 +118,8 @@
     "expand": "Ekspander",
     "deletePermanently": "Slett permanent",
     "restore": "Gjenopprett",
-    "confirmDeleteProgress": "Bekreft sletting"
+    "confirmDeleteProgress": "Bekreft sletting",
+    "reset": "Nullstill"
   },
   "login": {
     "login": "Logg inn",
@@ -196,7 +197,7 @@
       "header": "Automatisk registrering av progresjon",
       "readMore": "Les mer",
       "googleSheetId": "Google Sheet ID",
-      "googleSheetIdHelp": "Kode fra URL .../spreadsheets/d/<strong><d></strong>",
+      "googleSheetIdHelp": "Koden mellom /d/ og /edit/ fra URLen til Google Sheets arket",
       "sheetsTab": "Fane",
       "sheetsTabHelp": "Samme som navnet på fanen i Google Sheets",
       "sheetsCell": "Celle",
@@ -217,6 +218,8 @@
     "automatic": "Oppdateres automatisk",
     "autoHelpText": "Verdien til dette nøkkelresultatet oppdateres automatisk fra et Google Sheets-dokument.",
     "showComment": "Vis kommentar",
+    "showComments": "Vis kommentarer",
+    "hideComments": "Skjul kommentarer",
     "autoError": "Feil i henting av data fra Google Sheets:"
   },
   "objective": {
@@ -253,16 +256,19 @@
     "department": {
       "picture": "Bilde",
       "create": "Opprett nytt produktområde",
-      "parentOrganisation": "Tilhører organisasjon"
+      "parentOrganisation": "Tilhører organisasjon",
+      "search": "Søk {count} organisasjoner"
     },
     "organization": {
       "picture": "Bilde",
-      "create": "Opprett ny organisasjon"
+      "create": "Opprett ny organisasjon",
+      "search": "Søk {count} produktområder"
     },
     "product": {
       "picture": "Bilde",
       "create": "Opprett nytt produkt",
-      "parentDepartment": "Tilhører produktområde"
+      "parentDepartment": "Tilhører produktområde",
+      "search": "Søk {count} produkter"
     },
     "objects": {
       "showArchived": "Vis arkiverte objekter"
@@ -298,7 +304,8 @@
     "history": "Historikk",
     "registeredBy": "Registrert av",
     "value": "Verdi",
-    "date": "Dato"
+    "date": "Dato",
+    "filter": "Filtrer"
   },
   "help": {
     "title": "Hjelp",

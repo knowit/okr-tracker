@@ -56,6 +56,7 @@ This key is used for fetching data from Google Sheets (for automatically updatin
 firebase functions:config:set
   sheets.email="<service account email>"
   sheets.key="<service account private key>"
+  sheets.impersonator="email-address" (optional)
 ```
 
 **Note: The private key string needs to have actual line breaks as opposed to `\\n` because of an issue with how Firebase stores environment variables. [Read more](https://github.com/firebase/firebase-tools/issues/371).**
@@ -88,7 +89,8 @@ Get your Firebase SDK snippet from your [Firebase Console](https://console.fireb
 | `VUE_APP_APP_ID`                 | _from SDK snippet_        |
 | `VUE_APP_MEASUREMENT_ID`         | _from SDK snippet_        |
 | `VUE_APP_SHEETS_SERVICE_ACCOUNT` | \<service account email\> |
-| `VUE_APP_I18N_LOCALE`            | `nb-NO \| en-US`          |
+| `VUE_APP_I18N_LOCALE`            | `nb-NO OR en-US`          |
+| `VUE_APP_REGION`                 | `europe-west2`            |
 
 ### Link project
 
@@ -181,6 +183,12 @@ Automatically fix lint issues
 ```bash
 npm run lint:style:fix
 ```
+
+## Google Sheets integration
+
+If you want to use Google Sheets API for automatic key results or automatic KPIs, you will need to enable the Google Sheets API in Google Cloud Console.
+
+If you are using Team Drives with domain-policy (only specific domains have access) then you need to turn on domain-wide delegation on your service accounts and then give that service account access through G Suite Admin. Read more about it [here](https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority)
 
 ## Import production data from Cloud Firestore to local Firestore
 
