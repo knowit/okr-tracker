@@ -1,6 +1,8 @@
 <template>
   <div v-if="thisUser" class="main">
     <h1 class="title-1">{{ thisUser.displayName || thisUser.id }}</h1>
+    <button @click="migrateUsers">Migrate users</button>
+    <button @click="migrateAudit">Migrate audit</button>
 
     <div class="user">
       <div class="user__image">
@@ -73,7 +75,7 @@
 </template>
 
 <script>
-import { db } from '@/config/firebaseConfig';
+import { db, functions } from '@/config/firebaseConfig';
 import User from '@/db/User';
 
 export default {
@@ -130,6 +132,24 @@ export default {
   },
 
   methods: {
+    async migrateUsers() {
+      try {
+        const myCall = functions.httpsCallable('migrateUserIds');
+        await myCall();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async migrateAudit() {
+      try {
+        const myCall = functions.httpsCallable('migrateAudit');
+        await myCall();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
     setImage({ target }) {
       const { files } = target;
       if (files.length !== 1) return;

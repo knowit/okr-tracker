@@ -4,7 +4,6 @@
     <Breadcrumbs></Breadcrumbs>
     <main class="container">
       <div class="sidebarContainer">
-        <button @click="migrateUsers">Migrate users</button>
         <SidebarNavigation v-if="user"></SidebarNavigation>
       </div>
       <div class="main-view">
@@ -52,14 +51,6 @@ export default {
   },
 
   methods: {
-    async migrateUsers() {
-      try {
-        const myCall = functions.httpsCallable('migrateUserIds');
-        await myCall();
-      } catch (err) {
-        console.log(err);
-      }
-    },
   },
 };
 

@@ -8,19 +8,67 @@ const db = admin.firestore();
 const from = '@byr.oslo.kommune.no';
 const to = '@origo.oslo.kommune.no';
 
-exports.migrateUserIds = functions.region(config.region).https.onCall(migrateUserIds);
+exports.migrateUserIds = functions
+  .runWith({
+    timeoutSeconds: 300,
+    memory: '4GB',
+  })
+  .region(config.region)
+  .https.onCall(migrateUserIds);
+exports.migrateAudit = functions
+  .runWith({
+    timeoutSeconds: 300,
+    memory: '4GB',
+  })
+  .region(config.region)
+  .https.onCall(migrateAudit);
+
+async function migrateAudit() {
+  try {
+    await processAudit();
+  } catch (err) {
+    console.log(err);
+    throw new functions.https.HttpsError('cancelled', err.message);
+  }
+}
 
 async function migrateUserIds() {
   try {
+    console.log('start userDocuments');
     await replaceUserDocuments();
+    console.log('done userDocuments');
+
+    console.log('start Teams');
+
     await replaceTeams();
+    console.log('done Teams');
+
+    console.log('start Periods');
+
     await processPeriods();
+
+    console.log('done Periods');
+    console.log('start Orgs');
+
     await processOrganizations();
+
+    console.log('done Orgs');
+    console.log('start Objectives');
+
     await processObjectives();
+    console.log('done Objectives');
+    console.log('start KeyResults');
+
     await processKeyResults();
+    console.log('done KeyResults');
+    console.log('start Departments');
+
     await processDepartments();
-    await processAudit();
-    //await processKpis();
+    console.log('done Departments');
+
+    console.log('start KPIs');
+    await processKpis();
+    console.log('done  KPIS');
     return true;
   } catch (err) {
     console.log(err);
@@ -32,7 +80,7 @@ async function replaceUserDocuments() {
   const users = db.collection('users');
   const userRefs = await users.get().then(({ docs }) => docs);
 
-  const userData = userRefs.map(doc => ({
+  const userData = userRefs.map((doc) => ({
     ...doc.data(),
     id: doc.id.replace(from, to),
     email: doc.id.replace(from, to),
@@ -40,7 +88,7 @@ async function replaceUserDocuments() {
 
   await Promise.all(userRefs.map(({ ref }) => ref.delete()));
 
-  userData.forEach(obj => {
+  userData.forEach((obj) => {
     users.doc(obj.id).set(obj);
   });
 
@@ -55,7 +103,7 @@ async function replaceTeams() {
   if (!productRefs.length) return true;
 
   return Promise.all(
-    productRefs.map(async doc => {
+    productRefs.map(async (doc) => {
       const { team } = doc.data();
       const teamRef = team.map(({ id }) => users.doc(id.replace(from, to))) || [];
 
@@ -72,20 +120,39 @@ async function processAudit() {
 
   if (!documents.length) return true;
 
+  let counter = 0;
+  let commitCounter = 0;
+  const batches = [];
+
+  batches[commitCounter] = db.batch();
+
   try {
-    documents.forEach(doc => {
+    documents.forEach((doc) => {
       const { user } = doc.data();
 
-      let newUser;
+      let newUser = user;
       if (user.id) {
-        newUser = user.id.replace(from, to);
+        newUser.id.replace(from, to);
       } else {
-        newUser = user.replace(from, to);
+        newUser = newUser.replace(from, to);
       }
-      doc.ref.update({
-        user: newUser,
-      });
+
+      if (counter < 500) {
+        batches[commitCounter].update(doc.ref, { user: newUser });
+        counter += 1;
+      } else if (counter === 500) {
+        counter = 0;
+        commitCounter += 1;
+        batches[commitCounter] = db.batch();
+
+        batches[commitCounter].update(doc.ref, { user: newUser });
+        counter += 1;
+      }
     });
+
+    const promises = batches.map((batch) => batch.commit());
+    await Promise.all(promises);
+    console.log('done');
   } catch (e) {
     console.log(e);
   }
@@ -101,7 +168,7 @@ async function processDepartments() {
   if (!departmentRefs.length) return true;
 
   return Promise.all(
-    departmentRefs.map(doc => {
+    departmentRefs.map((doc) => {
       return replaceCreatedAndEdited(doc, users);
     })
   );
@@ -115,7 +182,7 @@ async function processKeyResults() {
   if (!keyResultsRefs.length) return true;
 
   return Promise.all(
-    keyResultsRefs.map(doc => {
+    keyResultsRefs.map((doc) => {
       return replaceCreatedAndEdited(doc, users);
     })
   );
@@ -129,7 +196,7 @@ async function processKpis() {
   if (!kpisRefs.length) return true;
 
   return Promise.all(
-    kpisRefs.map(doc => {
+    kpisRefs.map((doc) => {
       return replaceCreatedAndEdited(doc, users);
     })
   );
@@ -143,7 +210,7 @@ async function processObjectives() {
   if (!objectivesRefs.length) return true;
 
   return Promise.all(
-    objectivesRefs.map(doc => {
+    objectivesRefs.map((doc) => {
       return replaceCreatedAndEdited(doc, users);
     })
   );
@@ -157,7 +224,7 @@ async function processOrganizations() {
   if (!organizationsRefs.length) return true;
 
   return Promise.all(
-    organizationsRefs.map(doc => {
+    organizationsRefs.map((doc) => {
       return replaceCreatedAndEdited(doc, users);
     })
   );
@@ -171,7 +238,7 @@ async function processPeriods() {
   if (!periodsRefs.length) return true;
 
   return Promise.all(
-    periodsRefs.map(doc => {
+    periodsRefs.map((doc) => {
       return replaceCreatedAndEdited(doc, users);
     })
   );

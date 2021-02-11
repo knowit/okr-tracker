@@ -18,6 +18,8 @@ exports.fetchAutomatedKeyResOnSchedule = require('./automatedKeyResults').fetchA
 exports.triggerScheduledFunction = require('./automatedKeyResults').triggerScheduledFunction;
 
 exports.migrateUserIds = require('./migrateUserIds').migrateUserIds;
+exports.migrateAudit = require('./migrateUserIds').migrateAudit;
+
 /**
  * KPI functions
  */

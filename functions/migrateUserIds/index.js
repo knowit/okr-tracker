@@ -1,3 +1,4 @@
-const { migrateUserIds } = require('./migrateUserIds');
+const { migrateUserIds, migrateAudit } = require('./migrateUserIds');
 
 exports.migrateUserIds = migrateUserIds;
+exports.migrateAudit = migrateAudit;
