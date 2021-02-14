@@ -132,7 +132,7 @@ async function processAudit() {
 
       let newUser = user;
       if (user.id) {
-        newUser.id.replace(from, to);
+        newUser = db.collection('users').doc(user.id.toString().replace(from, to));
       } else {
         newUser = newUser.replace(from, to);
       }
