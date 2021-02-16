@@ -114,11 +114,12 @@ auth.onAuthStateChanged(async (user) => {
       if (!exists) {
         const oldUserRef = await User.getUserFromId(email);
 
-        await User.create({ ...oldUserRef.data(), id: preferred_username, email });
+        await User.create({ id: preferred_username, email });
         const newUserRef = await User.getUserFromId(preferred_username);
 
         if (oldUserRef) {
           await User.replaceFromTeams(oldUserRef.id, newUserRef.id);
+          await User.update({ ...oldUserRef.data(), id: preferred_username, email });
           await User.remove(oldUserRef.data());
         }
 
