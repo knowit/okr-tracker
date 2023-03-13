@@ -4,7 +4,7 @@ This doc will provide instructions for setting up the script to run locally. Run
 
 ### What does the script do?
 
-The tf.main file creates a new project in GCP, attaches firebase, creates a firestore database and adds authentication services with email-password login. Required variables are stated in the variables file and must be filled in when running the script. The script assumes the following GCP structure
+The main.tf file creates a new project in GCP, attaches firebase, creates a firestore database and adds authentication services with email-password login. Required variables are stated in the variables file and must be filled in when running the script. The script assumes the following GCP structure
 
 - GCP Organization
   - Folder for new projects

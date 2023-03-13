@@ -146,7 +146,7 @@ resource "google_storage_bucket" "default" {
 resource "google_service_account" "admin_sdk" {
   provider     = google-beta
   project      = google_project.project.project_id
-  account_id   = "firebase-adminsdk-ouwu6"
+  account_id   = var.firebase_admin_sdk_id
   display_name = "firebase-adminsdk"
   depends_on = [
     google_project_service.iam

@@ -46,3 +46,9 @@ variable "default_region" {
   default     = "europe-west2"
   nullable    = false
 }
+
+variable "firebase_admin_sdk_id" {
+  description = "ID to use for creating a new firebase admin sdk service account"
+  type        = string
+  nullable    = false
+}
