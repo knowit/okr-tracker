@@ -10,6 +10,9 @@ export default async function itemHome(to, from, next) {
   const { activeItem } = state;
   const { slug } = to.params;
 
+  // Log data
+  writeLog(slug);
+
   if (from.params && from.params.slug === slug) next();
   if (activeItem && activeItem.slug === slug) next();
 

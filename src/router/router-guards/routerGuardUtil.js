@@ -1,4 +1,5 @@
 import { db } from '@/config/firebaseConfig';
+import { writeLog } from '../../db/Logger/Logger';
 import store from '@/store';
 
 const getSlugRef = async (slug) => {
@@ -7,6 +8,7 @@ const getSlugRef = async (slug) => {
   if (!slugSnapshot.exists) {
     throw new Error(`cannot find ${slug}`);
   }
+
   const { reference } = slugSnapshot.data();
 
   const { archived } = await reference.get().then((snap) => snap.data());
