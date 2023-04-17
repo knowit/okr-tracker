@@ -1,5 +1,5 @@
 export const jobPositions = [
-  'staff',
+  'operations',
   'backendDeveloper',
   'businessAnalyst',
   'businessDeveloper',
@@ -50,7 +50,7 @@ export const possibleDesigners = [
   'contentProducer',
 ];
 
-export const possibleAdm = ['humanResourcesManager', 'staff', 'hr'];
+export const possibleAdm = ['humanResourcesManager', 'operations', 'hr'];
 
 export const displayOrder = [
   'director',
@@ -61,6 +61,6 @@ export const displayOrder = [
   'designLead',
   'designers',
   'developers',
-  'staff',
+  'operations',
   'others',
 ];

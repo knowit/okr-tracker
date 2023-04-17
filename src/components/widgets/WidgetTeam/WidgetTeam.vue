@@ -94,9 +94,9 @@ export default {
               ? (this.teamMembers.designers = [employee])
               : this.teamMembers.designers.push(employee);
           } else if (possibleAdm.includes(employee.position)) {
-            !this.teamMembers.staff
-              ? (this.teamMembers.staff = [employee])
-              : this.teamMembers.staff.push(employee);
+            !this.teamMembers.operations
+              ? (this.teamMembers.operations = [employee])
+              : this.teamMembers.operations.push(employee);
           } else {
             !this.teamMembers[employee.position]
               ? (this.teamMembers[employee.position] = [employee])

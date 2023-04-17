@@ -86,7 +86,7 @@
 
       <hr class="divider" />
 
-      <h3 class="widget__title title-2">{{ $t('general.staff') }}</h3>
+      <h3 class="widget__title title-2">{{ $t('general.operations') }}</h3>
 
       <div class="sidebar__group sidebar__bottom button-col">
         <router-link
