@@ -11,9 +11,6 @@ export default async function itemHome(to, from, next) {
   const { activeItem } = state;
   const { slug } = to.params;
 
-  // Log data
-  writeLog(slug);
-
   if (from.params && from.params.slug === slug) next();
   if (activeItem && activeItem.slug === slug) next();
 
@@ -22,6 +19,8 @@ export default async function itemHome(to, from, next) {
 
     if (!activeItem || !slugRef || activeItem.id !== slugRef.id) {
       await store.dispatch('set_active_item', slugRef);
+      // Log data
+      writeLog(slug);
     }
 
     next();
