@@ -1,4 +1,5 @@
 import store from '@/store';
+import writeLog from '@/db/Logger/Logger.js';
 import getSlugRef from './routerGuardUtil';
 
 const { state } = store;
@@ -9,6 +10,9 @@ const { state } = store;
 export default async function itemHome(to, from, next) {
   const { activeItem } = state;
   const { slug } = to.params;
+
+  // Log data
+  writeLog(slug);
 
   if (from.params && from.params.slug === slug) next();
   if (activeItem && activeItem.slug === slug) next();
