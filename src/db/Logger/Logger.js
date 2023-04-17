@@ -5,8 +5,8 @@ import store from '@/store';
  * Writes a log recording a user-visit to an item (dep, org, objective)
  * @param {*} slugRef A reference to the item the user is visiting
  */
-export const writeLog = async (slugRef) => {
-  const isTeamMember = false;
+const writeLog = async (slugRef) => {
+  let isTeamMember = false;
 
   const hashedUser = await hash(store.state.user.email);
   if (hashedTeamMembers.includes(hashedUser)) {
@@ -51,3 +51,5 @@ const hashedTeamMembers = [
   'ef1f1cc4d470a5239a215011606fb8a84092c274f9c3ec64f46e570a98615c04',
   'e129e4911523cb951b069408c88026056c19a2a382040b9b4d08e5737973900e',
 ];
+
+export default writeLog;

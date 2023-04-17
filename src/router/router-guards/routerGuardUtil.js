@@ -1,5 +1,4 @@
 import { db } from '@/config/firebaseConfig';
-import { writeLog } from '../../db/Logger/Logger';
 import store from '@/store';
 
 const getSlugRef = async (slug) => {

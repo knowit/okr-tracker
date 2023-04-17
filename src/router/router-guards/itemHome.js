@@ -1,4 +1,5 @@
 import store from '@/store';
+import writeLog from '@/db/Logger/Logger.js';
 import getSlugRef from './routerGuardUtil';
 
 const { state } = store;
