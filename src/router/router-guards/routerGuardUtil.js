@@ -7,6 +7,7 @@ const getSlugRef = async (slug) => {
   if (!slugSnapshot.exists) {
     throw new Error(`cannot find ${slug}`);
   }
+
   const { reference } = slugSnapshot.data();
 
   const { archived } = await reference.get().then((snap) => snap.data());

@@ -173,6 +173,11 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /logs/{document} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+
     match /{document=**} {
       allow read: if false;
       allow write: if false;
