@@ -37,6 +37,12 @@ export default {
         this.renderProgressionChart();
       },
     },
+    activePeriod: {
+      immediate: true,
+      handler() {
+        this.renderProgressionChart();
+      },
+    },
   },
 
   mounted() {
