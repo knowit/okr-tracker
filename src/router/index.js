@@ -73,6 +73,12 @@ const routes = [
     component: () => import('@/views/Help.vue'),
   },
   {
+    path: '/user-activity',
+    name: 'user-activity',
+    component: () => import('@/views/UserActivity.vue'),
+    beforeEnter: routerGuards.userActivity,
+  },
+  {
     path: '/:slug',
     component: () => import('@/views/ItemWrapper.vue'),
     beforeEnter: routerGuards.itemHome,

@@ -76,6 +76,9 @@
         <router-link v-if="user.admin" :to="{ name: 'Admin' }" class="btn btn--ter button-link">
           <span>{{ $t('general.admin') }}</span>
         </router-link>
+        <router-link v-if="user.admin" :to="{ name: 'user-activity' }" class="btn btn--ter button-link">
+          <span>{{ $t('general.userActivity') }}</span>
+        </router-link>
         <router-link :to="{ name: 'Help' }" class="btn btn--ter button-link">
           <span>{{ $t('general.help') }}</span>
         </router-link>

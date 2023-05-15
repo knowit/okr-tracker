@@ -162,6 +162,7 @@
     "owner": "Knowit",
     "help": "Help",
     "admin": "Admin",
+    "userActivity": "User activity",
     "administration": "Administration",
     "superAdmin": "Super admin",
     "signOut": "Sign out",
